@@ -6,17 +6,6 @@ infixl 4 _≡_
 data _≡_ {A : Set} (x : A) : A → Set where
   refl : x ≡ x
 
--- open import Relation.Binary
---
--- setoid : Setoid _ _
--- setoid = record
---   { Carrier = _
---   ; _≈_ = {!   !}
---   ; isEquivalence = {!   !}
---   }
-
--- setoid :
-
 J : (A : Set) (C : (x y : A) → x ≡ y → Set)
     → ((x : A) → C x x refl)
     → (x y : A) (P : x ≡ y)
@@ -117,10 +106,10 @@ involution {A} {x} {y} p = J A D d x y p
     d x = refl
 
 -- lemma-2-1-4-iv: associativity of path concatenation
-∘-assoc : {A : Set} {w x y z : A}
+∙-assoc : {A : Set} {w x y z : A}
   → (p : w ≡ x) (q : x ≡ y) (r : y ≡ z)
   → p ∙ (q ∙ r) ≡ (p ∙ q) ∙ r
-∘-assoc {A} {w} {x} {y} {z} p q r = J A D d w x p y q z r
+∙-assoc {A} {w} {x} {y} {z} p q r = J A D d w x p y q z r
   where
     -- the predicate
     D : (w x : A) (p : w ≡ x) → Set
@@ -132,18 +121,22 @@ involution {A} {x} {y} p = J A D d x y p
     d : (x : A) → D x x refl
     d x y q z r = refl
 
+-- horizontal composition
 _⋆_ : {A : Set} {a b c : A} {p q : a ≡ b} {r s : b ≡ c}
   → (α : p ≡ q) (β : r ≡ s)
   → p ∙ r ≡ q ∙ s
-_⋆_ {A} {a} {b} {c} {p} {q} {r} {s} α β = {!   !}
+_⋆_ {A} {a} {b} {c} {p} {q} {r} {s} α β = (α ∙r r) ∙ (q ∙l β)
 
   where
+    ru : {A : Set} {x y : A} (p : x ≡ y) → p ≡ p ∙ refl
+    ru {A} {x} {y} p = ∙-identityʳ p
+
+    -- whisker right
     infixl 6 _∙r_
     _∙r_ : {A : Set} {a b c : A} {p q : a ≡ b}
       → (α : p ≡ q) (r : b ≡ c)
       → p ∙ r ≡ q ∙ r
     _∙r_ {A} {a} {b} {c} {p} {q} α r = J A D d b c r a p q α
-      -- J A D d b c r a p q α
       where
         -- the predicate
         D : (b c : A) (r : b ≡ c) → Set
@@ -152,26 +145,32 @@ _⋆_ {A} {a} {b} {c} {p} {q} {r} {s} α β = {!   !}
 
         -- base case
         d : (x : A) → D x x refl
-        d x a p q α = ¬ (∙-identityʳ p) ∙ (α ∙ ∙-identityʳ q)
+        d x a p q α = ¬ ∙-identityʳ p ∙ α ∙ ∙-identityʳ q
 
-    ru : {A : Set} {x y : A} (p : x ≡ y) → p ≡ p ∙ refl
-    ru {A} {x} {y} p = ∙-identityʳ p
-
-    lemma1 : ∀ {A : Set} {a b c : A}
+    whisker-right-lemma : ∀ {A : Set} {a b c : A}
       → {p q : a ≡ b} {r : b ≡ c}
       → {α : p ≡ q}
       → α ∙r refl ≡ ¬ ru p ∙ α ∙ ru q
-    lemma1 {A} {a} {b} {c} {p} {q} {r} {α} = J A D d a b p q α
+    whisker-right-lemma {A} {a} {b} {c} {p} {q} {r} {α} = refl
+
+    -- whisker left
+    infixl 6 _∙l_
+    _∙l_ : {A : Set} {a b c : A} {r s : b ≡ c}
+      → (q : a ≡ b) (β : r ≡ s)
+      → q ∙ r ≡ q ∙ s
+    _∙l_ {A} {a} {b} {c} {r} {s} q β = J A D d a b q c r s β
       where
         -- the predicate
-        D : (a b : A) (p : a ≡ b) → Set
-        D a b p = (q : a ≡ b) (α : p ≡ q)
-          → α ∙r refl ≡ ¬ ru p ∙ α ∙ ru q
+        D : (a b : A) (q : a ≡ b) → Set
+        D a b q = (c : A) (r s : b ≡ c) (β : r ≡ s)
+          → q ∙ r ≡ q ∙ s
 
         -- base case
         d : (x : A) → D x x refl
-        d x q α = {!   !}
+        d x c r s β = ¬ ∙-identityˡ r ∙ β ∙ ∙-identityˡ s
 
-        -- -- base case
-        -- d : (x : A) → D x x refl
-        -- d x a p q α = ¬ (∙-identityʳ p) ∙ (α ∙ ∙-identityʳ q)
+    whisker-left-lemma : ∀ {A : Set} {a b c : A}
+      → {p q : a ≡ b} {r : b ≡ c}
+      → {α : p ≡ q}
+      → α ∙r refl ≡ ¬ ru p ∙ α ∙ ru q
+    whisker-left-lemma {A} {a} {b} {c} {p} {q} {r} {α} = refl
