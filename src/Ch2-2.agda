@@ -6,7 +6,7 @@ open import Ch2-1
 
 open import Level
 
--- lemma-2-2-1 (ap)
+-- Lemma 2.2.1 (ap)
 ap : {a b : Level} {A : Set a} {B : Set b} {x y : A}
   → (f : A → B)
   → (p : x ≡ y)
@@ -36,7 +36,7 @@ ap {a} {b} {A} {B} {x} {y} f p = J {a} {a ⊔ b} A D d x y p f
 --     d x a b q f = ap (f x) q
 
 
--- lemma-2-2-2-i (ap respects _∙_)
+-- Lemma 2.2.2.i (ap respects _∙_)
 ap-∙ : {A B : Set} {x y z : A}
   → (f : A → B)
   → (p : x ≡ y) (q : y ≡ z)
@@ -51,7 +51,7 @@ ap-∙ {A} {B} {x} {y} {z} f p q = J A D d x y p f z q
     d : (x : A) → D x x refl
     d x f z q = refl
 
--- lemma-2-2-2-ii (ap respects ¬_)
+-- Lemma 2.2.2.ii (ap respects ¬_)
 ap-¬ : {A B : Set} {x y : A}
   → (f : A → B)
   → (p : x ≡ y)
@@ -68,7 +68,7 @@ ap-¬ {A} {B} {x} {y} f p = J A D d x y p f
 
 open import Function using (_∘_; id)
 
--- lemma-2-2-2-iii (ap respects function compos)
+-- Lemma 2.2.2.iii (ap respects function compos)
 ap-∘ : {A B C : Set} {x y : A}
   → (f : A → B) (g : B → C)
   → (p : x ≡ y)
@@ -83,7 +83,7 @@ ap-∘ {A} {B} {C} {x} {y} f g p = J A D d x y p f g
     d : (x : A) → D x x refl
     d x f g = refl
 
--- lemma-2-2-2-iv (ap respects identity function)
+-- Lemma 2.2.2.iv (ap respects identity function)
 ap-id : {A : Set} {x y : A}
   → (p : x ≡ y)
   → ap id p ≡ p

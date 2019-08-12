@@ -21,7 +21,7 @@ J A C b x .x refl = b x
 --   → C loop
 -- K A x C b p = {! p  !}
 
--- lemma-2-1-1: inversion of paths
+-- Lemma 2.1.1 (inversion of paths)
 infix 6 ¬_
 ¬_ : {A : Set} {x y : A} → x ≡ y → y ≡ x
 ¬_ {A} {x} {y} p = J A D d x y p
@@ -34,7 +34,7 @@ infix 6 ¬_
     d x = refl
 
 
--- lemma-2-1-2: concatenation of paths
+-- Lemma 2.1.2 (concatenation of paths)
 infixl 5 _∙_
 _∙_ : {a : Level} {A : Set a} {x y z : A} → x ≡ y → y ≡ z → x ≡ z
 _∙_ {a} {A} {x} {y} {z} p q = J {a} {a} A D d x y p z q
@@ -49,7 +49,7 @@ _∙_ {a} {A} {x} {y} {z} p q = J {a} {a} A D d x y p z q
     d x z q = q
 
 
--- lemma-2-1-4-i: identity of path concatenation
+-- Lemma 2.1.4.i (identity of path concatenation)
 ∙-identityʳ : {A : Set} {x y : A} (p : x ≡ y) → p ≡ p ∙ refl
 ∙-identityʳ {A} {x} {y} p = J A D d x y p
 
@@ -73,7 +73,7 @@ _∙_ {a} {A} {x} {y} {z} p q = J {a} {a} A D d x y p z q
     d : (x : A) → D x x refl
     d x = refl
 
--- lemma-2-1-4-ii: identity of path inversion
+-- Lemma 2.1.4.ii (identity of path inversion)
 ¬-identityʳ : {A : Set} {x y : A} (p : x ≡ y) → ¬ p ∙ p ≡ refl
 ¬-identityʳ {A} {x} {y} p = J A D d x y p
   where
@@ -96,7 +96,7 @@ _∙_ {a} {A} {x} {y} {z} p q = J {a} {a} A D d x y p z q
     d : (x : A) → D x x refl
     d x = refl
 
--- lemma-2-1-4-iii: involution of path inversion
+-- Lemma 2.1.4.iii (involution of path inversion)
 involution : {A : Set} {x y : A} (p : x ≡ y) → ¬ ¬ p ≡ p
 involution {A} {x} {y} p = J A D d x y p
   where
@@ -108,7 +108,7 @@ involution {A} {x} {y} p = J A D d x y p
     d : (x : A) → D x x refl
     d x = refl
 
--- lemma-2-1-4-iv: associativity of path concatenation
+-- Lemma 2.1.4.iv (associativity of path concatenation)
 ∙-assoc : {A : Set} {w x y z : A}
   → (p : w ≡ x) (q : x ≡ y) (r : y ≡ z)
   → p ∙ (q ∙ r) ≡ (p ∙ q) ∙ r

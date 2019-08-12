@@ -6,8 +6,8 @@ open import Level hiding (lift)
 
 open import Ch2-1
 
--- lemma-2-3.1 (transport)
-transport : {a : Level} {b : Level} {A : Set a} {x y : A}
+-- Lemma 2.3.1 (transport)
+transport : {a b : Level} {A : Set a} {x y : A}
   → (P : A → Set b)
   → (p : x ≡ y)
   → P x → P y
@@ -24,7 +24,7 @@ transport {a} {b} {A} {x} {y} P p = J {a} {a ⊔ suc b} A D d x y p P
 
 open import Data.Product
 
--- lemma-2-3.2 (path lifting property)
+-- Lemma 2.3.2 (path lifting property)
 lift : {a b : Level} {A : Set a} {x y : A}
   → (P : A → Set b)
   → (u : P x)
@@ -41,7 +41,7 @@ lift {a} {b} {A} {x} {y} P u p = J {a} {a ⊔ b} A D d x y p u
     d x u = refl
 
 
--- lemma-2-3.4 (dependent map)
+-- Lemma 2.3.4 (dependent map)
 apd : {a b : Level} {A : Set a} {x y : A}
   → {P : A → Set b}
   → (f : (z : A) → P z)
@@ -59,7 +59,7 @@ apd {a} {b} {A} {x} {y} {P} f p = J A D d x y p P f
 
 open import Function using (const; _∘_)
 
--- lemma-2-3-5
+-- Lemma 2.3.5
 transportconst : {a ℓ : Level} {A : Set a} {x y : A}
   → {B : Set ℓ}
   → (p : x ≡ y)
@@ -77,7 +77,7 @@ transportconst {a} {ℓ} {A} {x} {y} {B} p b = J A D d x y p B b
 
 open import Ch2-2
 
--- lemma-2-3-8
+-- Lemma 2.3.8
 lemma-2-3-8 : {a ℓ : Level} {A : Set a} {B : Set ℓ} {x y : A}
   → (f : A → B)
   → (p : x ≡ y)
@@ -92,7 +92,7 @@ lemma-2-3-8 {a} {ℓ} {A} {B} {x} {y} f p = J {a} {a ⊔ ℓ} A D d x y p f
     d : (x : A) → D x x refl
     d x f = refl
 
--- lemma-2-3-9
+-- Lemma 2.3.9
 lemma-2-3-9 : {a b : Level} {A : Set a} {x y z : A}
   → (P : A → Set b)
   → (p : x ≡ y)
@@ -110,7 +110,7 @@ lemma-2-3-9 {a} {b} {A} {x} {y} {z} P p q u = J A D d x y p P z q u
     d : (x : A) → D x x refl
     d x P z q u = refl
 
--- lemma-2-3-10
+-- Lemma 2.3.10
 lemma-2-3-10 : {a b c : Level} {A : Set a} {B : Set b} {x y : A}
   → (P : B → Set c)
   → (f : A → B)
@@ -128,7 +128,7 @@ lemma-2-3-10 {a} {b} {c} {A} {B} {x} {y} P f p u = J A D d x y p P f u
     d : (x : A) → D x x refl
     d x P f u = refl
 
--- lemma-2-3-11
+-- Lemma 2.3.11
 lemma-2-3-11 : {a b c : Level} {A : Set a} {x y : A}
   → (P : A → Set b) (Q : A → Set c)
   → (f : (z : A) → P z → Q z)
@@ -136,6 +136,7 @@ lemma-2-3-11 : {a b c : Level} {A : Set a} {x y : A}
   → (u : P x)
   → transport Q p (f x u) ≡ f y (transport P p u)
 lemma-2-3-11 {a} {b} {c} {A} {x} {y} P Q f p u = J A D d x y p P Q f u
+  -- J A D d x y p {!   !} {!   !} {!   !} {!   !}
   where
     -- the predicate
     D : (x y : A) (p : x ≡ y) → Set _
