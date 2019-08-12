@@ -7,7 +7,7 @@ open import Level hiding (lift)
 open import Ch2-1
 
 -- Lemma 2.3.1 (transport)
-transport : {a b : Level} {A : Set a} {x y : A}
+transport : ∀ {a b} {A : Set a} {x y : A}
   → (P : A → Set b)
   → (p : x ≡ y)
   → P x → P y
@@ -25,7 +25,7 @@ transport {a} {b} {A} {x} {y} P p = J {a} {a ⊔ suc b} A D d x y p P
 open import Data.Product
 
 -- Lemma 2.3.2 (path lifting property)
-lift : {a b : Level} {A : Set a} {x y : A}
+lift : ∀ {a b} {A : Set a} {x y : A}
   → (P : A → Set b)
   → (u : P x)
   → (p : x ≡ y)
@@ -42,7 +42,7 @@ lift {a} {b} {A} {x} {y} P u p = J {a} {a ⊔ b} A D d x y p u
 
 
 -- Lemma 2.3.4 (dependent map)
-apd : {a b : Level} {A : Set a} {x y : A}
+apd : ∀ {a b} {A : Set a} {x y : A}
   → {P : A → Set b}
   → (f : (z : A) → P z)
   → (p : x ≡ y)
@@ -60,7 +60,7 @@ apd {a} {b} {A} {x} {y} {P} f p = J A D d x y p P f
 open import Function using (const; _∘_)
 
 -- Lemma 2.3.5
-transportconst : {a ℓ : Level} {A : Set a} {x y : A}
+transportconst : ∀ {a ℓ} {A : Set a} {x y : A}
   → {B : Set ℓ}
   → (p : x ≡ y)
   → (b : B)
@@ -78,7 +78,7 @@ transportconst {a} {ℓ} {A} {x} {y} {B} p b = J A D d x y p B b
 open import Ch2-2
 
 -- Lemma 2.3.8
-lemma-2-3-8 : {a ℓ : Level} {A : Set a} {B : Set ℓ} {x y : A}
+lemma-2-3-8 : ∀ {a ℓ} {A : Set a} {B : Set ℓ} {x y : A}
   → (f : A → B)
   → (p : x ≡ y)
   → apd f p ≡ transportconst p (f x) ∙ ap f p
@@ -93,7 +93,7 @@ lemma-2-3-8 {a} {ℓ} {A} {B} {x} {y} f p = J {a} {a ⊔ ℓ} A D d x y p f
     d x f = refl
 
 -- Lemma 2.3.9
-lemma-2-3-9 : {a b : Level} {A : Set a} {x y z : A}
+lemma-2-3-9 : ∀ {a b} {A : Set a} {x y z : A}
   → (P : A → Set b)
   → (p : x ≡ y)
   → (q : y ≡ z)
@@ -108,10 +108,19 @@ lemma-2-3-9 {a} {b} {A} {x} {y} {z} P p q u = J A D d x y p P z q u
 
     -- base case
     d : (x : A) → D x x refl
-    d x P z q u = refl
+    d x P z q u = J A E e x z q P u
+      where
+        -- the predicate
+        E : (x z : A) (q : x ≡ z) → Set _
+        E x z q = (P : A → Set b) (u : P x)
+          → transport P q (transport P refl u) ≡ transport P (refl ∙ q) u
+
+        -- base case
+        e : (x : A) → E x x refl
+        e x P u = refl
 
 -- Lemma 2.3.10
-lemma-2-3-10 : {a b c : Level} {A : Set a} {B : Set b} {x y : A}
+lemma-2-3-10 : ∀ {a b c} {A : Set a} {B : Set b} {x y : A}
   → (P : B → Set c)
   → (f : A → B)
   → (p : x ≡ y)
