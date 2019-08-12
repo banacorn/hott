@@ -74,22 +74,22 @@ _∙_ {a} {A} {x} {y} {z} p q = J {a} {a} A D d x y p z q
     d x = refl
 
 -- Lemma 2.1.4.ii (identity of path inversion)
-¬-identityʳ : {A : Set} {x y : A} (p : x ≡ y) → ¬ p ∙ p ≡ refl
-¬-identityʳ {A} {x} {y} p = J A D d x y p
+¬-identityʳ : {a : Level} {A : Set a} {x y : A} (p : x ≡ y) → ¬ p ∙ p ≡ refl
+¬-identityʳ {a} {A} {x} {y} p = J A D d x y p
   where
     -- the predicate
-    D : (x y : A) (p : x ≡ y) → Set
+    D : (x y : A) (p : x ≡ y) → Set a
     D x y p = ¬ p ∙ p ≡ refl
 
     -- base case
     d : (x : A) → D x x refl
     d x = refl
 
-¬-identityˡ : {A : Set} {x y : A} (p : x ≡ y) → p ∙ ¬ p ≡ refl
-¬-identityˡ {A} {x} {y} p = J A D d x y p
+¬-identityˡ : {a : Level} {A : Set a} {x y : A} (p : x ≡ y) → p ∙ ¬ p ≡ refl
+¬-identityˡ {a} {A} {x} {y} p = J A D d x y p
   where
     -- the predicate
-    D : (x y : A) (p : x ≡ y) → Set
+    D : (x y : A) (p : x ≡ y) → Set a
     D x y p = p ∙ ¬ p ≡ refl
 
     -- base case
@@ -109,13 +109,13 @@ involution {A} {x} {y} p = J A D d x y p
     d x = refl
 
 -- Lemma 2.1.4.iv (associativity of path concatenation)
-∙-assoc : {A : Set} {w x y z : A}
+∙-assoc : {a : Level} {A : Set a} {w x y z : A}
   → (p : w ≡ x) (q : x ≡ y) (r : y ≡ z)
   → p ∙ (q ∙ r) ≡ (p ∙ q) ∙ r
-∙-assoc {A} {w} {x} {y} {z} p q r = J A D d w x p y q z r
+∙-assoc {a} {A} {w} {x} {y} {z} p q r = J A D d w x p y q z r
   where
     -- the predicate
-    D : (w x : A) (p : w ≡ x) → Set
+    D : (w x : A) (p : w ≡ x) → Set a
     D w x p = (y : A) (q : x ≡ y)
             → (z : A) (r : y ≡ z)
             → p ∙ (q ∙ r) ≡ (p ∙ q) ∙ r

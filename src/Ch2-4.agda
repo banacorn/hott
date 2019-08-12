@@ -62,3 +62,36 @@ Lemma-2-4-3 {a} {b} {A} {B} {x} {y} f g H p = J A D d x y p f g H
         ∙   -- refl ∙ H x
       ap (λ w → w ∙ H x) (¬ ap-refl f)
             -- ap f refl ∙ H x
+
+open import Function using (id)
+
+-- Corollary 2.4.4
+Corollary-2-4-4 : {a : Level} {A : Set a}
+  → (f : A → A)
+  → (H : f ~ id)
+  → (x : A)
+  → H (f x) ≡ ap f (H x)
+Corollary-2-4-4 {a} {A} f H x =
+      --  H (f x)
+  ∙-identityʳ (H (f x))
+    ∙ --  H (f x) ∙ refl
+  ap [ H (f x) ]∙ (¬ ¬-identityˡ (H x))
+    ∙ --  H (f x) ∙ (H x ∙ ¬ H x)
+  ∙-assoc (H (f x)) (H x) (¬ H x)
+    ∙ --  (H (f x) ∙ H x) ∙ ¬ H x)
+  ap ∙[ ¬ H x ] intermediate
+    ∙ --  (ap f (H x) ∙ H x) ∙ ¬ H x
+  ¬ ∙-assoc (ap f (H x)) (H x) (¬ H x)
+    ∙ --  ap f (H x) ∙ (H x ∙ ¬ H x)
+  ap [ ap f (H x) ]∙ (¬-identityˡ (H x))
+    ∙ --  ap f (H x) ∙ refl
+  ¬ ∙-identityʳ (ap f (H x))
+      --  ap f (H x)
+  where
+    intermediate : H (f x) ∙ H x ≡ ap f (H x) ∙ H x
+    intermediate =
+            -- H (f x) ∙ H x
+      ap [ H (f x) ]∙ (¬ ap-id (H x))
+        ∙   -- H (f x) ∙ ap id (H x)
+      Lemma-2-4-3 f id H (H x)
+            -- ap f (H x) ∙ H x

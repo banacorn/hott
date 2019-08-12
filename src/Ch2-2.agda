@@ -20,20 +20,36 @@ ap {a} {b} {A} {B} {x} {y} f p = J {a} {a ⊔ b} A D d x y p f
     -- base case
     d : (x : A) → D x x refl
     d x f = refl
---
--- ap2 : {A B C : Set} {x y : A} {a b : B}
---   → (f : A → B → C) (p : x ≡ y) (q : a ≡ b)
---   → f x a ≡ f y b
--- ap2 {A} {B} {C} {x} {y} {a} {b} f p q = J A D d x y p a b q f
---   -- J A D d x y p f
---   where
---     -- the predicate
---     D : (x y : A) (p : x ≡ y) → Set
---     D x y p = (a b : B) (q : a ≡ b) (f : A → B → C) → f x a ≡ f y b
---
---     -- base case
---     d : (x : A) → D x x refl
---     d x a b q f = ap (f x) q
+
+ap2 : {a b c : Level} {A : Set a} {B : Set b} {C : Set c} {x y : A} {z w : B}
+  → (f : A → B → C) (p : x ≡ y) (q : z ≡ w)
+  → f x z ≡ f y w
+ap2 {a} {b} {c} {A} {B} {C} {x} {y} {z} {w} f p q = J A D d x y p z w q f
+  where
+    -- the predicate
+    D : (x y : A) (p : x ≡ y) → Set _
+    D x y p = (a b : B) (q : z ≡ w) (f : A → B → C) → f x z ≡ f y w
+
+    -- base case
+    d : (x : A) → D x x refl
+    d x z w q f = ap (f x) q
+
+[_]∙ : {a : Level} {A : Set a} {x y z : A}
+  → (p : x ≡ y) (q : y ≡ z)
+  → x ≡ z
+[ p ]∙ q = p ∙ q
+
+∙[_] : {a : Level} {A : Set a} {x y z : A}
+  → (q : y ≡ z) (p : x ≡ y)
+  → x ≡ z
+∙[ p ] q = q ∙ p
+
+-- -- -- cong₂ ::
+-- [_]∙[_] : {a : Level} {A : Set a} {x y z : A}
+--   → (p q : x ≡ y) (r s : y ≡ z)
+--   → p ∙ r ≡ q ∙ s
+-- [_]∙[_] {a} {A} {x} {y} {z} p q r s = {! ap2  !}
+
 
 ap-refl : {a b : Level} {A : Set a} {B : Set b} {x : A}
   → (f : A → B)
@@ -88,13 +104,13 @@ ap-∘ {A} {B} {C} {x} {y} f g p = J A D d x y p f g
     d x f g = refl
 
 -- Lemma 2.2.2.iv (ap respects identity function)
-ap-id : {A : Set} {x y : A}
+ap-id : {a : Level} {A : Set a} {x y : A}
   → (p : x ≡ y)
   → ap id p ≡ p
-ap-id {A} {x} {y} p = J A D d x y p
+ap-id {a} {A} {x} {y} p = J A D d x y p
   where
     -- the predicate
-    D : (x y : A) (p : x ≡ y) → Set
+    D : (x y : A) (p : x ≡ y) → Set a
     D x y p = ap id p ≡ p
 
     -- base case
