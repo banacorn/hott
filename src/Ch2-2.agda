@@ -35,6 +35,10 @@ ap {a} {b} {A} {B} {x} {y} f p = J {a} {a ⊔ b} A D d x y p f
 --     d : (x : A) → D x x refl
 --     d x a b q f = ap (f x) q
 
+ap-refl : {a b : Level} {A : Set a} {B : Set b} {x : A}
+  → (f : A → B)
+  → ap {a} {b} {A} {B} {x} f refl ≡ refl
+ap-refl f = refl
 
 -- Lemma 2.2.2.i (ap respects _∙_)
 ap-∙ : {A B : Set} {x y z : A}

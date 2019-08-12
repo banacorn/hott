@@ -23,11 +23,11 @@ J A C b x .x refl = b x
 
 -- Lemma 2.1.1 (inversion of paths)
 infix 6 ¬_
-¬_ : {A : Set} {x y : A} → x ≡ y → y ≡ x
-¬_ {A} {x} {y} p = J A D d x y p
+¬_ : {a : Level} {A : Set a} {x y : A} → x ≡ y → y ≡ x
+¬_ {a} {A} {x} {y} p = J A D d x y p
 
   where
-    D : (x y : A) (p : x ≡ y) → Set
+    D : (x y : A) (p : x ≡ y) → Set a
     D x y p = y ≡ x
 
     d : (x : A) → D x x refl
@@ -50,23 +50,23 @@ _∙_ {a} {A} {x} {y} {z} p q = J {a} {a} A D d x y p z q
 
 
 -- Lemma 2.1.4.i (identity of path concatenation)
-∙-identityʳ : {A : Set} {x y : A} (p : x ≡ y) → p ≡ p ∙ refl
-∙-identityʳ {A} {x} {y} p = J A D d x y p
+∙-identityʳ : {a : Level} {A : Set a} {x y : A} (p : x ≡ y) → p ≡ p ∙ refl
+∙-identityʳ {a} {A} {x} {y} p = J A D d x y p
 
   where
     -- the predicate
-    D : (x y : A) (p : x ≡ y) → Set
+    D : (x y : A) (p : x ≡ y) → Set a
     D x y p = p ≡ p ∙ refl
 
     -- base case
     d : (x : A) → D x x refl
     d x = refl
 
-∙-identityˡ : {A : Set} {x y : A} (p : x ≡ y) → p ≡ refl ∙ p
-∙-identityˡ {A} {x} {y} p = J A D d x y p
+∙-identityˡ : {a : Level} {A : Set a} {x y : A} (p : x ≡ y) → p ≡ refl ∙ p
+∙-identityˡ {a} {A} {x} {y} p = J A D d x y p
   where
     -- the predicate
-    D : (x y : A) (p : x ≡ y) → Set
+    D : (x y : A) (p : x ≡ y) → Set a
     D x y p = p ≡ refl ∙ p
 
     -- base case
