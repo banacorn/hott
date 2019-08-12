@@ -149,8 +149,7 @@ setoid A = record
 _⋆_ : {A : Set} {a b c : A} {p q : a ≡ b} {r s : b ≡ c}
   → (α : p ≡ q) (β : r ≡ s)
   → p ∙ r ≡ q ∙ s
-_⋆_ {A} {a} {b} {c} {p} {q} {r} {s} α β =  {!   !}
-  -- (α ∙r r) ∙ (q ∙l β)
+_⋆_ {A} {a} {b} {c} {p} {q} {r} {s} α β =  (α ∙r r) ∙ (q ∙l β)
 
   where
     ru : {A : Set} {x y : A} (p : x ≡ y) → p ≡ p ∙ refl
@@ -260,8 +259,8 @@ subst2 {A} {B} {C} {x} {y} {a} {b} f p q = J A D d x y p a b q f
     d x a b q f = subst q (f x)
 
 
-theorem : {A : Set} {a b c : A}
-  → {p q : a ≡ b} {r s : b ≡ c}
-  → (α : p ≡ q) (β : r ≡ s)
-  → α ⋆ β ≡ subst2 _∙_ α β
-theorem α β = {!   !}
+-- theorem : {A : Set} {a b c : A}
+--   → {p q : a ≡ b} {r s : b ≡ c}
+--   → (α : p ≡ q) (β : r ≡ s)
+--   → α ⋆ β ≡ subst2 _∙_ α β
+-- theorem α β = {!   !}
