@@ -9,7 +9,7 @@ data _≡_ {a} {A : Set a} (x : A) : A → Set a where
   refl : x ≡ x
 
 
-J : {a b : Level} (A : Set a) (C : (x y : A) → x ≡ y → Set (a ⊔ b))
+J : {a b : Level} (A : Set a) (C : (x y : A) → x ≡ y → Set b)
     → ((x : A) → C x x refl)
     → (x y : A) (P : x ≡ y)
     → C x y P
