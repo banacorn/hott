@@ -25,12 +25,12 @@ transport {a} {b} {A} {x} {y} P p = J {a} {a ⊔ suc b} A D d x y p P
 open import Data.Product
 
 -- Lemma 2.3.2 (path lifting property)
-lift : ∀ {a b} {A : Set a} {x y : A}
+lift : ∀ {a b} {A : Set a}
   → (P : A → Set b)
-  → (u : P x)
-  → (p : x ≡ y)
-  → (x , u) ≡ (y , transport P p u)
-lift {a} {b} {A} {x} {y} P u p = J {a} {a ⊔ b} A D d x y p u
+  → (proof : Σ[ x ∈ A ] P x)
+  → (y : A)
+  → (p : proj₁ proof ≡ y) → proof ≡ (y , transport P p (proj₂ proof))
+lift {a} {b} {A} P proof y p = J A D d (proj₁ proof) y p (proj₂ proof)
   where
     -- the predicate
     D : (x y : A) (p : x ≡ y) → Set (a ⊔ b)
@@ -39,7 +39,6 @@ lift {a} {b} {A} {x} {y} P u p = J {a} {a ⊔ b} A D d x y p u
     -- base case
     d : (x : A) → D x x refl
     d x u = refl
-
 
 -- Lemma 2.3.4 (dependent map)
 apd : ∀ {a b} {A : Set a} {x y : A}
