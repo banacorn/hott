@@ -78,7 +78,9 @@ Theorem-2-6-2 {_} {_} {A} {B} (a , a') (b , b') = Definition-2-6-1 , it-isequiv
             d : (x : A × B) → D x x refl
             d x = refl
 
-
+-- pair≡ :  ∀ {a b} {A : Set a} {B : Set b} {x y : A × B}
+--   → proj₁ x ≡ proj₁ y × proj₂ x ≡ proj₂ y → x ≡ y
+-- pair≡ p = Definition-2-6-3 p
 
 -- Definition 2.6.4
 _X_ : {a b : Level} {Z : Set a}
@@ -102,3 +104,40 @@ Theorem-2-6-4 {_} {_} {Z} A B {z} {w} p x = J _ D d z w p x
 
     d : (z : Z) → D z z refl
     d z x = refl
+
+-- Definition 2.6.5
+Definition-2-6-5 : {a a' b b' : Level}
+  → {A : Set a} {A' : Set a'} {B : Set b} {B' : Set b'}
+  → (g : A → A') (h : B → B')
+  → A × B
+  → A' × B'
+Definition-2-6-5 g h x = g (proj₁ x) , h (proj₂ x)
+
+
+-- Theorem 2.6.5
+Theorem-2-6-5 : {a a' b b' : Level}
+  → {A : Set a} {A' : Set a'} {B : Set b} {B' : Set b'}
+  → (g : A → A') (h : B → B')
+  → {x y : A × B}
+  → (p : proj₁ x ≡ proj₁ y)
+  → (q : proj₂ x ≡ proj₂ y)
+  → ap (Definition-2-6-5 g h) (Definition-2-6-3 (p , q)) ≡ Definition-2-6-3 (ap g p , ap h q)
+Theorem-2-6-5 {A = A} {A'} {B} {B'} g h {x} {y} p q = J _ D d (proj₁ x) (proj₁ y) p g h (proj₂ x) (proj₂ y) q
+  where
+    D : (x₁ y₁ : A) (p : x₁ ≡ y₁) → Set _
+    D x₁ y₁ p = (g : A → A') (h : B → B') (x₂ y₂ : B) (q : x₂ ≡ y₂)
+      → ap (Definition-2-6-5 g h) (Definition-2-6-3 (p , q)) ≡
+        Definition-2-6-3 (ap g p , ap h q)
+
+
+    d : (x : A) → D x x refl
+    d x g h x₂ y₂ q = J _ E e x₂ y₂ q g h
+
+      where
+        E : (x₂ y₂ : B) (q : x₂ ≡ y₂) → Set _
+        E x₂ y₂ q = (g : A → A') (h : B → B')
+          → ap (Definition-2-6-5 g h) (Definition-2-6-3 (refl , q)) ≡
+            Definition-2-6-3 (ap g refl , ap h q)
+
+        e : (y : B) → E y y refl
+        e y g h = refl
