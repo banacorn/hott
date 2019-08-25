@@ -77,3 +77,28 @@ Theorem-2-6-2 {_} {_} {A} {B} (a , a') (b , b') = Definition-2-6-1 , it-isequiv
 
             d : (x : A × B) → D x x refl
             d x = refl
+
+
+
+-- Definition 2.6.4
+_X_ : {a b : Level} {Z : Set a}
+  → (A B : Z → Set b)
+  → Z → Set _
+_X_ {a} {b} {Z} A B z = A z × B z
+
+
+-- Theorem 2.6.4
+Theorem-2-6-4 : {a b : Level} {Z : Set a}
+  → (A B : Z → Set b)
+  → {z w : Z} (p : z ≡ w)
+  → (x : (A X B) z)
+  → transport (A X B) p x ≡ ((transport A p (proj₁ x)) , transport B p (proj₂ x))
+Theorem-2-6-4 {_} {_} {Z} A B {z} {w} p x = J _ D d z w p x
+  where
+    D : (z w : Z) (p : z ≡ w) → Set _
+    D z w p = (x : (A X B) z)
+      → transport (A X B) p x ≡
+        (transport A p (proj₁ x) , transport B p (proj₂ x))
+
+    d : (z : Z) → D z z refl
+    d z x = refl
