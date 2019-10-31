@@ -93,6 +93,15 @@ Lemma-2-4-3 {a} {b} {A} {B} {x} {y} f g H p = J A D d x y p f g H
         open import Relation.Binary.Reasoning.Setoid (setoid (f x ≡ g x))
 
 
+
+--              f(H(x))
+--      f(x) ========== f(y)
+--       ||              ||
+--  H(x) ||              ||  H(y)
+--       ||              ||
+--      g(x) ========== g(y)
+--              g(p)
+--
 -- Corollary 2.4.4
 Corollary-2-4-4 : ∀ {a} {A : Set a}
   → (f : A → A)

@@ -5,13 +5,20 @@ module Ch2-3 where
 open import Level hiding (lift)
 
 open import Ch2-1
+open import Ch2-2
 
+--           p
+--    x ~~~~~~~~~ y
+--
+--
+--  P x --------> P y
+--
 -- Lemma 2.3.1 (transport)
 transport : ∀ {a b} {A : Set a} {x y : A}
   → (P : A → Set b)
   → (p : x ≡ y)
   → P x → P y
-transport {a} {b} {A} {x} {y} P p = J {a} {a ⊔ suc b} A D d x y p P
+transport {a} {b} {A} {x} {y} P p = J A D d x y p P
   -- J A D d x y p P
   where
     -- the predicate
@@ -24,12 +31,20 @@ transport {a} {b} {A} {x} {y} P p = J {a} {a ⊔ suc b} A D d x y p P
 
 open import Data.Product
 
+--   proof
+--  +-----+     p      +-----+
+--  |  x ~~~~~~~~~~~~~~~~ y  |
+--  |     |            |     |
+--  | P x |~~~~~~~~~~~~| P y |
+--  +-----+     *      +-----+
+--
 -- Lemma 2.3.2 (path lifting property)
 lift : ∀ {a b} {A : Set a}
   → (P : A → Set b)
   → (proof : Σ[ x ∈ A ] P x)
   → (y : A)
-  → (p : proj₁ proof ≡ y) → proof ≡ (y , transport P p (proj₂ proof))
+  → (p : proj₁ proof ≡ y)
+  → proof ≡ (y , transport P p (proj₂ proof))
 lift {a} {b} {A} P proof y p = J A D d (proj₁ proof) y p (proj₂ proof)
   where
     -- the predicate
@@ -40,6 +55,21 @@ lift {a} {b} {A} P proof y p = J A D d (proj₁ proof) y p (proj₂ proof)
     d : (x : A) → D x x refl
     d x u = refl
 
+
+--    A
+--    +----------------------------------------------+
+--    |                      p                       |
+--    |   x ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ y  |
+--    |   +                                       +  |
+--    +----------------------------------------------+
+--        |                                       |
+--    P x |       P y                             |
+--    +-------+   +----------------------------------+
+--    |   v   |   |                          *    v  |
+--    |  f x +-------> transport P p (f x) ~~~~~ f y |
+--    |       |   |                                  |
+--    +-------+   +----------------------------------+
+--
 -- Lemma 2.3.4 (dependent map)
 apd : ∀ {a b} {A : Set a} {x y : A}
   → {P : A → Set b}
