@@ -17,3 +17,11 @@ ind : ∀ {a b c} {A : Set a} {B : Set b}
   → (p : A × B)
   → C p
 ind C c (fst , snd) = c fst snd
+
+-- Definition 1.5.2
+Definition-1-5-2 : ∀ {a b c} {A : Set a} {B : Set b}
+  → (C : Set c)
+  → (f : A → B → C)
+  → A × B
+  → C
+Definition-1-5-2 {_} {_} {_} {A} {B} C f (fst , snd) = f fst snd
