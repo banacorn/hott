@@ -1,4 +1,4 @@
-{-# OPTIONS --without-K #-}
+{-# OPTIONS --without-K --no-pattern-matching #-}
 
 module Ch2-7 where
 
@@ -31,7 +31,8 @@ Definition-2-7-2-ii : ∀ {a b} {A : Set a} {P : A → Set b}
   → (w w' : Σ[ x ∈ A ] P x)
   → (Σ[ p ∈ proj₁ w ≡ proj₁ w' ] transport P p (proj₂ w) ≡ proj₂ w')
   → (w ≡ w')
-Definition-2-7-2-ii {_} {_} {A} {P} (w1 , w2) (w1' , w2') (fst , snd) = J A D d w1 w1' fst w2 w2' snd
+Definition-2-7-2-ii {_} {_} {A} {P} w w' p = J A D d (proj₁ w) (proj₁ w') (proj₁ p) (proj₂ w) (proj₂ w') (proj₂ p)
+  -- J A D d w1 w1' fst w2 w2' snd
   where
     D : (w1 w1' : A) (p : w1 ≡ w1') → Set _
     D w1 w1' p = (w2 : P w1) (w2' : P w1') (q : transport P p w2 ≡ w2') → (w1 , w2) ≡ (w1' , w2')
@@ -47,13 +48,14 @@ Definition-2-7-2-ii {_} {_} {A} {P} (w1 , w2) (w1' , w2') (fst , snd) = J A D d 
         e : (y : P x) → E y y refl
         e y = refl
 
+
 Lemma-2-7-2-iii : ∀ {a b} {A : Set a} {P : A → Set b}
   → (w w' : Σ[ x ∈ A ] P x)
   → isequiv (Definition-2-7-2-i w w')
 Lemma-2-7-2-iii {_} {_} {A} {P} w w' = (Definition-2-7-2-ii w w' , α) , (Definition-2-7-2-ii w w' , β)
   where
     α : Definition-2-7-2-i w w' ∘ Definition-2-7-2-ii w w' ~ id
-    α (fst , snd) = J A D d (proj₁ w) (proj₁ w') fst (proj₂ w) (proj₂ w') snd
+    α p = J A D d (proj₁ w) (proj₁ w') (proj₁ p) (proj₂ w) (proj₂ w') (proj₂ p)
       where
         D : (x y : A) (p : x ≡ y) → Set _
         D x y p = (x' : P x) (y' : P y) (q : transport P p x' ≡ y')
@@ -86,4 +88,22 @@ Theorem-2-7-2 : ∀ {a b} {A : Set a} {P : A → Set b}
   → (w w' : Σ[ x ∈ A ] P x)
   → (w ≡ w') ≅ (Σ[ p ∈ proj₁ w ≡ proj₁ w' ] transport P p (proj₂ w) ≡ proj₂ w')
 Theorem-2-7-2 {_} {_} {A} {P} w w' = Definition-2-7-2-i w w' , Lemma-2-7-2-iii w w'
-  
+
+-- Corollary 2.7.3
+Corollary-2-7-3 : ∀ {a b} {A : Set a} {P : A → Set b}
+  → (z : Σ[ x ∈ A ] P x)
+  → z ≡ (proj₁ z , proj₂ z)
+Corollary-2-7-3 {a} {b} {A} {P} z
+  = ←≅ (Theorem-2-7-2 z z) (refl , refl)
+
+-- Theorem 2.7.4
+Theorem-2-7-4 : ∀ {a b} {A : Set a}
+  → {P : A → Set b}
+  → {Q : Σ[ x ∈ A ] P x → Set b}
+  -- → (f : (x : A) → Σ[ x ∈ A ] Σ[ u ∈ P x ] Q (x , u))
+  → {x y : A}
+  → (p : x ≡ y)
+  → (f : Σ[ x ∈ A ] Σ[ u ∈ P x ] Q (x , u))
+  → transport {!   !} p f ≡
+      ((transport {!   !} p (proj₁ f)) , (transport {!   !} (Definition-2-7-2-ii {!   !} f {!   !}) (proj₂ f)))
+Theorem-2-7-4 {a} {b} {A} {P} {Q} = {!   !}

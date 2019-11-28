@@ -284,6 +284,9 @@ Property-2-4-10-ii {a} {b} {A} {B} f ((g , α) , (h , β)) = g , (α , β')
 _≅_ : ∀ {a b} (A : Set a) (B : Set b) → Set (a ⊔ b)
 A ≅ B = Σ[ f ∈ (A → B) ] isequiv f
 
+≅→ : ∀ {a b} {A : Set a} {B : Set b} → A ≅ B → A → B
+≅→ (f , _) = f
+
 -- Lemma 2.4.12-i
 Lemma-2-4-12-i : ∀ {a} (A : Set a) → A ≅ A
 Lemma-2-4-12-i A = id , Property-2-4-10-i id example-2-4-7
@@ -305,6 +308,9 @@ Lemma-2-4-12-ii {a} {b} {A} {B} (f , f-isequiv) = f⁻¹ , f⁻¹-isequiv
 
     f⁻¹-isequiv : isequiv f⁻¹
     f⁻¹-isequiv = Property-2-4-10-i f⁻¹ f⁻¹-qinv
+
+←≅ : ∀ {a b} {A : Set a} {B : Set b} → A ≅ B → B → A
+←≅ = ≅→ ∘ Lemma-2-4-12-ii
 
 -- Lemma 2.4.12-iii
 Lemma-2-4-12-iii : ∀ {a} {b} {c} {A : Set a} {B : Set b} {C : Set c}

@@ -1,4 +1,4 @@
-{-# OPTIONS --without-K #-}
+{-# OPTIONS --without-K --no-pattern-matching #-}
 
 module Ch2-6 where
 
@@ -26,9 +26,10 @@ Definition-2-6-1 {_} {_} {A} {B} {x} {y} p = J (A × B) D d x y p
     d x = refl , refl
 
 -- Definition 2.6.3
-Definition-2-6-3 : ∀ {i j} {A : Set i} {B : Set j} {a b : A} {a' b' : B}
-  → a ≡ b × a' ≡ b' → (a , a') ≡ (b , b')
-Definition-2-6-3 {_} {_} {A} {B} {a} {b} {a'} {b'} (fst , snd) = J A D d a b fst a' b' snd
+Definition-2-6-3 : ∀ {i j} {A : Set i} {B : Set j} {x y : A × B}
+  → proj₁ x ≡ proj₁ y × proj₂ x ≡ proj₂ y → x ≡ y
+Definition-2-6-3 {_} {_} {A} {B} {x} {y} p
+  = J A D d (proj₁ x) (proj₁ y) (proj₁ p) (proj₂ x) (proj₂ y) (proj₂ p)
   where
     D : (a b : A) (fst : a ≡ b) → Set _
     D a b fst = (a' b' : B) (snd : a' ≡ b') → (a , a') ≡ (b , b')
@@ -43,10 +44,14 @@ Definition-2-6-3 {_} {_} {A} {B} {a} {b} {a'} {b'} (fst , snd) = J A D d a b fst
         e : (x : B) → E x x refl
         e x y = refl
 
+pair≡ :  ∀ {a b} {A : Set a} {B : Set b} {x y : A × B}
+  → proj₁ x ≡ proj₁ y × proj₂ x ≡ proj₂ y → x ≡ y
+pair≡ = Definition-2-6-3
+
 -- Theorem 2.6.2
 Theorem-2-6-2 : ∀ {a b} {A : Set a} {B : Set b} (x y : A × B)
   → (x ≡ y) ≅ (proj₁ x ≡ proj₁ y × proj₂ x ≡ proj₂ y)
-Theorem-2-6-2 {_} {_} {A} {B} (a , a') (b , b') = Definition-2-6-1 , it-isequiv
+Theorem-2-6-2 {_} {_} {A} {B} a b = Definition-2-6-1 , it-isequiv
   --
   where
     it-isequiv : isequiv Definition-2-6-1
@@ -54,7 +59,7 @@ Theorem-2-6-2 {_} {_} {A} {B} (a , a') (b , b') = Definition-2-6-1 , it-isequiv
 
       where
         α : Definition-2-6-1 ∘ Definition-2-6-3 ~ id
-        α (fst , snd) = J A D d a b fst a' b' snd
+        α p = J A D d (proj₁ a) (proj₁ b) (proj₁ p) (proj₂ a) (proj₂ b) (proj₂ p)
           where
             D : (x y : A) (p : x ≡ y) → Set _
             D x y p = (x' y' : B) (snd : x' ≡ y')
@@ -70,17 +75,13 @@ Theorem-2-6-2 {_} {_} {A} {B} (a , a') (b , b') = Definition-2-6-1 , it-isequiv
                 e x' = refl
 
         β : Definition-2-6-3 ∘ Definition-2-6-1 ~ id
-        β p = J (A × B) D d (a , a') (b , b') p
+        β p = J (A × B) D d a b p
           where
             D : (x y : A × B) (p : x ≡ y) → Set _
             D x y p = (Definition-2-6-3 ∘ Definition-2-6-1) p ≡ id p
 
             d : (x : A × B) → D x x refl
             d x = refl
-
--- pair≡ :  ∀ {a b} {A : Set a} {B : Set b} {x y : A × B}
---   → proj₁ x ≡ proj₁ y × proj₂ x ≡ proj₂ y → x ≡ y
--- pair≡ p = Definition-2-6-3 p
 
 -- Definition 2.6.4
 _X_ : {a b : Level} {Z : Set a}
