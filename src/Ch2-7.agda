@@ -100,10 +100,24 @@ Corollary-2-7-3 {a} {b} {A} {P} z
 Theorem-2-7-4 : ∀ {a b} {A : Set a}
   → {P : A → Set b}
   → {Q : Σ[ x ∈ A ] P x → Set b}
-  -- → (f : (x : A) → Σ[ x ∈ A ] Σ[ u ∈ P x ] Q (x , u))
   → {x y : A}
   → (p : x ≡ y)
-  → (f : Σ[ x ∈ A ] Σ[ u ∈ P x ] Q (x , u))
-  → transport {!   !} p f ≡
-      ((transport {!   !} p (proj₁ f)) , (transport {!   !} (Definition-2-7-2-ii {!   !} f {!   !}) (proj₂ f)))
-Theorem-2-7-4 {a} {b} {A} {P} {Q} = {!   !}
+  → (f : Σ[ u ∈ P x ] Q (x , u))
+  → transport (λ w → Σ[ u ∈ P w ] Q (w , u)) p f
+      ≡ (transport P p (proj₁ f) , transport Q
+          (←≅ (Theorem-2-7-2 (x , (proj₁ f))
+          (y , (transport P p (proj₁ f)))) (p , refl)) (proj₂ f))
+Theorem-2-7-4 {a} {b} {A} {P} {Q} {x} {y} p f = J A D d x y p f
+  where
+    D : (x y : A) (p : x ≡ y) → Set _
+    D x y p = (f : Σ[ u ∈ P x ] Q (x , u))
+      → transport (λ w → Σ-syntax (P w) (λ u → Q (w , u))) p f ≡
+      (transport P p (proj₁ f) ,
+       transport Q
+       (←≅ (Theorem-2-7-2 (x , proj₁ f) (y , transport P p (proj₁ f)))
+        (p , refl))
+       (proj₂ f))
+
+
+    d : (x : A) → D x x refl
+    d x f = refl
