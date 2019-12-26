@@ -61,10 +61,41 @@ Theorem-2-9-1 {_} {_} {A} {B} f g = happly , (funext , α) , (funext , {!   !})
     -- β :  funext ? ∘ happly ~ ?
     -- β p = {!   !}
 
+
+
+
+--       B x₁      B x₂
+--     f  |         |
+--       A x₁     x : A x₂
+--             p
+-- X      x₁ ----> x₂
+
 Theorem-2-9-4 : ∀ {a} {b} {X : Set a}
   → (x₁ x₂ : X)
   → (p : x₁ ≡ x₂)
   → (A B : X → Set b)
   → (f : A x₁ → B x₁)
-  → transport {a} {b} (λ x → A x → B x) p f ≡ λ x → transport B p (f (transport A (¬ p) x))
-Theorem-2-9-4 x₁ x₂ p A B f = {!   !}
+  → transport (λ x → A x → B x) p f ≡ λ x → transport B p (f (transport A (¬ p) x))
+Theorem-2-9-4 {a} {b} {X} x₁ x₂ p A B f = J X D d x₁ x₂ p f
+  --
+  where
+    D : (x₁ x₂ : X) → x₁ ≡ x₂ → Set _
+    D x₁ x₂ p = (f : A x₁ → B x₁) → transport (λ x → A x → B x) p f ≡ (λ x → transport B p (f (transport A (¬ p) x)))
+
+    d : (x : X) → D x x refl
+    d x f = refl
+
+-- Theorem-2-9-4 : ∀ {a} {b} {X : Set a}
+--   → (x₁ x₂ : X)
+--   → (p : x₁ ≡ x₂)
+--   → (A B : X → Set b)
+--   → (f : A x₁ → B x₁)
+--   → transport (λ x → A x → B x) p f ≡ λ x → transport B p (f (transport A (¬ p) x))
+-- Theorem-2-9-4 {a} {b} {X} x₁ x₂ p A B f = J X D d x₁ x₂ p f
+--   --
+--   where
+--     D : (x₁ x₂ : X) → x₁ ≡ x₂ → Set _
+--     D x₁ x₂ p = (f : A x₁ → B x₁) → transport (λ x → A x → B x) p f ≡ (λ x → transport B p (f (transport A (¬ p) x)))
+--
+--     d : (x : X) → D x x refl
+--     d x f = refl
