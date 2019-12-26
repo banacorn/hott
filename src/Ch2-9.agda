@@ -1,4 +1,5 @@
 {-# OPTIONS --without-K --no-pattern-matching #-}
+-- {-# OPTIONS --without-K #-}
 
 module Ch2-9 where
 
@@ -37,44 +38,33 @@ Theorem-2-9-1 : ∀ {a} {b} {A : Set a} {B : A → Set b}
   → (f g : (x : A) → B x)
   → (f ≡ g) ≅ (f ~ g)
 Theorem-2-9-1 {_} {_} {A} {B} f g = happly , (funext , α) , (funext , {!   !})
-
+  -- (λ x → happly (funext x)) ~ (λ x → x)
   where
     α : happly ∘ funext ~ id
-    α p = J {!   !} D {!   !} f g (funext p)
-      -- J ((x : A) → B x) D d f g (funext p)
-      --
+    α p = J ((x : A) → B x) D d f g (funext p) p
+
       where
-        D : (f g : (x : A) → B x) (p : {!   !}) → Set _
-        D f g p = {!   !}
-          -- ((λ {x} → happly) ∘ funext) p ≡ id p
-          -- ((λ {x} → happly) ∘ funext) p ≡ id p
-          -- happly ∘ funext ~ id
+        D : (f g : (x : A) → B x) → f ≡ g → Set _
+        D f g p' = happly {f = f} {g} ∘ funext ~ id
 
-        -- d : (x : (x : A) → B x) → D x x refl
-        -- d x = refl
+        d : (y : (x : A) → B x) → D y y refl
+        d y p = {! happly (funext p)  !}
+    -- α : ∀ h → happly ∘ funext h ~ h
+    -- α p = J ((x : A) → B x) D d f g (funext p) p
+    --   where
+    --     D : (f g : (x : A) → B x) → f ≡ g → Set _
+    --     D f g p = (q : (x : A) → f x ≡ g x) → (happly {f = f} {g} (funext q)) ≡ id q
+    --
+    --     d : (x : (x : A) → B x) → D x x refl
+    --     d x p = {! p id  !}
 
-    -- happly-isequiv : isequiv (happly f g)
-    -- happly-isequiv =
+    -- β :  funext ? ∘ happly ~ ?
+    -- β p = {!   !}
 
-
-  -- where
-  --   f : x ≡ y → ⊤
-  --   f p = tt
-  --
-  --   f' : ⊤ → x ≡ y
-  --   f' x = refl
-  --
-  --   α : (λ _ → f refl) ~ id
-  --   α w = refl
-  --
-  --   β : (λ _ → refl) ~ id
-  --   β w = J ⊤ D d x y w
-  --     where
-  --       D : (x y : ⊤) (p : x ≡ y) → Set _
-  --       D x y p = refl ≡ id p
-  --
-  --       d : (x : ⊤) → D x x refl
-  --       d x = refl
-  --
-  --   f-isequiv : isequiv f
-  --   f-isequiv = (f' , α) , f' , β
+Theorem-2-9-4 : ∀ {a} {b} {X : Set a}
+  → (x₁ x₂ : X)
+  → (p : x₁ ≡ x₂)
+  → (A B : X → Set b)
+  → (f : A x₁ → B x₁)
+  → transport {a} {b} (λ x → A x → B x) p f ≡ λ x → transport B p (f (transport A (¬ p) x))
+Theorem-2-9-4 x₁ x₂ p A B f = {!   !}
